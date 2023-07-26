@@ -16,12 +16,12 @@ public class JpaMain {
         tx.begin();
 
         try {
-            //비영속
-            Member member = new Member();
-            member.setId(100L);
-            member.setName("HelloJPA");
-
             //영속
+            Member member = new Member();
+            member.setId(3L);
+            member.setUsername("C");
+            member.setRoleType(RoleType.GUSET);
+
             entityManager.persist(member);
 
             tx.commit();
