@@ -18,7 +18,7 @@ public class JpaMain {
 
         try {
             //영속
-            Member member = new Member();//
+            Member member = new Member();
             member.setUsername("C");
             
             entityManager.persist(member);
