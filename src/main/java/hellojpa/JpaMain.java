@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.Arrays;
 import java.util.List;
 
 public class JpaMain {
@@ -17,11 +18,9 @@ public class JpaMain {
 
         try {
             //영속
-            Member member = new Member();
-            member.setId(3L);
+            Member member = new Member();//
             member.setUsername("C");
-            member.setRoleType(RoleType.GUSET);
-
+            
             entityManager.persist(member);
 
             tx.commit();
