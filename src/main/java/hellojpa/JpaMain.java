@@ -17,11 +17,27 @@ public class JpaMain {
         tx.begin();
 
         try {
-            //영속
+            //저장
+            Team team = new Team();
+            team.setName("TeamA");
+            entityManager.persist(team);
+
             Member member = new Member();
-            member.setUsername("C");
-            
+            member.setUsername("member1");
             entityManager.persist(member);
+
+            team.addMember(member);
+
+            entityManager.flush();
+            entityManager.clear();
+
+            Team findTeam = entityManager.find(Team.class, team.getId());
+            List<Member> members = findTeam.getMembers();
+
+            for (Member m : members) {
+                System.out.println("m = " + m.getUsername());
+            }
+
 
             tx.commit();
         } catch (Exception e) {
