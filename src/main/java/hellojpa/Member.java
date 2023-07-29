@@ -15,16 +15,9 @@ public class Member extends BaseEntity {
     @Column(name = "USERNAME")
     private String userName;
 
-//    @Column(name = "TEAM_ID")
-//    private Long teamId;
-
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
     private Team team;
-
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
 
     public Member() {
 
@@ -53,10 +46,4 @@ public class Member extends BaseEntity {
     public void setTeam(Team team) {
         this.team = team;
     }
-
-//    public void changeTeam(Team team) {
-//        this.team = team;
-//
-//        team.getMembers().add(this);
-//    }
 }

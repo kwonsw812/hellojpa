@@ -1,39 +1,45 @@
 package hellojpa;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import org.hibernate.Hibernate;
+import org.hibernate.jpa.internal.PersistenceUnitUtilImpl;
+
+import javax.persistence.*;
 
 public class JpaMain {
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
 
-        EntityManager entityManager = emf.createEntityManager();
+        EntityManager em = emf.createEntityManager();
 
-        EntityTransaction tx = entityManager.getTransaction();
+        EntityTransaction tx = em.getTransaction();
         tx.begin();
 
         try {
-            //저장
-            Member member = new Member();
-            member.setUsername("user1");
-            member.setCreatedBy("kim");
-            member.setCreatedDate(LocalDateTime.now());
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
 
-            entityManager.persist(member);
+            member1.setTeam(team);
 
-            entityManager.flush();
-            entityManager.clear();
+            em.persist(member1);
+
+            em.flush();
+            em.clear();
+
+            Member m = em.getReference(Member.class, member1.getId());
+
+            System.out.println("m = " + m.getTeam().getClass());
+
+            m.getTeam().getName();
 
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
+            e.printStackTrace();
         } finally {
-            entityManager.close();
+            em.close();
         }
 
 
