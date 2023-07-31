@@ -4,6 +4,8 @@ import org.hibernate.Hibernate;
 import org.hibernate.jpa.internal.PersistenceUnitUtilImpl;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -15,24 +17,34 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setHomeAddress(new Address("homeCity", "street", "10000"));
 
-            member1.setTeam(team);
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("족발");
+            member.getFavoriteFoods().add("피자");
 
-            em.persist(member1);
+            member.getAddressHistory().add(new AddressEntity("old1", "street", "10000"));
+            member.getAddressHistory().add(new AddressEntity("old2", "street", "10000"));
+
+            em.persist(member);
 
             em.flush();
             em.clear();
 
-            Member m = em.getReference(Member.class, member1.getId());
+            System.out.println("=========================================");
+            Member findMember = em.find(Member.class, member.getId());
 
-            System.out.println("m = " + m.getTeam().getClass());
+//            Address a = findMember.getHomeAddress();
+//            findMember.setHomeAddress(new Address("newCity", a.getStreet(), a.getZipcode()));
+//
+//            findMember.getFavoriteFoods().remove("치킨");
+//            findMember.getFavoriteFoods().add("한식");
 
-            m.getTeam().getName();
+//            findMember.getAddressHistory().remove(new AddressEntity("old1", "street", "10000"));
+//            findMember.getAddressHistory().add(new AddressEntity("newCity", "street", "10000"));
+
 
             tx.commit();
         } catch (Exception e) {
